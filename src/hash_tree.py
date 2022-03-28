@@ -46,30 +46,32 @@ class HashTree:
 
     def __delitem__(self, key):
         def del_elem(elem,key):
-            if elem.key == key:
-                if elem.left:
-                    a = elem.left
-                    while a.right:
-                        if a.right.right == None:
-                            break
-                        a = a.right
-                    if a.right:
-                        a.right.right = elem.right
-                        a.right.left,a.right = elem.left,a.right.left
+            if elem:
+                if elem.key == key:
+                    if elem.left:
+                        a = elem.left
+                        while a.right:
+                            if a.right.right == None:
+                                break
+                            a = a.right
+                        if a.right:
+                            a.right.right = elem.right
+                            a.right.left,a.right = elem.left,a.right.left
+                        else:
+                            a.right = elem.right
+                        return a
+                    elif elem.right:
+                        return elem.right
                     else:
-                        a.right = elem.right
-                    return a
-                elif elem.right:
-                    return elem.right
+                        return None
                 else:
-                    return None
-            else:
-                if elem.key > key:
-                    elem.left = del_elem(elem.left, key)
-                    return elem
-                else:
-                    elem.right = del_elem(elem.right, key)
-                    return elem
+                    if elem.key > key:
+                        elem.left = del_elem(elem.left, key)
+                        return elem
+                    else:
+                        elem.right = del_elem(elem.right, key)
+                        return elem
+            return elem
         self.head = del_elem(self.head,key)
 
 
