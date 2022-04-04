@@ -1,4 +1,7 @@
 class Node:
+    """
+    linked list node class
+    """
     def __init__(self, value=None, next=None, key=None):
         self.value = value
         self.next = next
@@ -12,7 +15,7 @@ class LinkedList:
         self.length = 0
 
     def __str__(self):
-        if self.first != None:
+        if self.first is not None:
             current = self.first
             out = 'LinkedList [' + str(current.value) + '(' + str(current.key) + ')' + ','
             while current.next != None:
@@ -57,7 +60,7 @@ class HashMap:
             a = a.next
         if y == 0:
             self._inner_list[hash(key) % self._size].add(x, key)
-        self._count += 1
+            self._count += 1
         if self._count >= 0.8 * self._size:
             self._size = self._size * 2
             a = [LinkedList() for i in range(self._size)]
