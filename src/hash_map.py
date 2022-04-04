@@ -47,7 +47,7 @@ class HashMap:
             if c.key == key:
                 return c.value
             c = c.next
-        return None
+        raise KeyError
 
     def __setitem__(self, key, x):
         a = self._inner_list[hash(key) % self._size].first
