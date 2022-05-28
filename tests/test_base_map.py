@@ -4,7 +4,7 @@ testing MappingProtocol
 import unittest
 from test import mapping_tests
 
-from src.my_collections.maps import TreeMap
+from src.my_collections.maps import TreeMasedrftp
 
 
 class GeneralMappingTests(mapping_tests.BasicTestMappingProtocol):

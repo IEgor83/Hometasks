@@ -1,3 +1,6 @@
+from src.maps.Base_map import BaseMap
+from copy import deepcopy
+
 
 class NodeTree:
     def __init__(self, key: str = None, value=None, left=None, right=None):
@@ -7,7 +10,7 @@ class NodeTree:
         self.right = right
 
 
-class HashTree:
+class HashTree(BaseMap):
     def __init__(self):
         self.head = None
         self.length = 0
@@ -26,6 +29,7 @@ class HashTree:
                 cls.add(a.left, key, value)
         else:
             a.value = value
+            raise KeyError
 
     def __setitem__(self, key, value):
         if self.head is None:
@@ -33,8 +37,11 @@ class HashTree:
             self.length += 1
         else:
             a = self.head
-            self.add(a, key, value)
-            self.length += 1
+            try:
+                self.add(a, key, value)
+                self.length += 1
+            except KeyError:
+                pass
 
     def __getitem__(self, key):
         a = self.head
@@ -57,7 +64,7 @@ class HashTree:
                 return elem
             elif elem.key < key:
                 elem.right = del_elem(elem.right, key)
-                return  elem
+                return elem
             else:
                 if elem.left and elem.right:
                     a = elem.left
@@ -86,25 +93,32 @@ class HashTree:
         return return_all(self.head)
 
     def __iter__(self):
-        self.a = self
+        self.a = deepcopy(self)
         return self
 
     def __next__(self):
-        if self.length > 0:
-            b = self.a.head
-            while b.left:
-                b = b.left
-            del self.a[b.key]
-            return b.key, b.value
-        print(self.a)
-        raise StopIteration
+        try:
+            if self.length > 0:
+                b = self.a.head
+                while b.left:
+                    b = b.left
+                del self.a[b.key]
+                return b.key, b.value
+            print(self.a)
+        except AttributeError:
+            raise StopIteration
+
+    def __len__(self):
+        return self.length
 
 
+'''
 s = HashTree()
+
 s[8] = 8
 s[5] = 5
 s[7] = 7
-s[6] = 6
+s[8] = 6
 s[4] = 4
 s[11] = 11
 s[9] = 9
@@ -112,5 +126,11 @@ s[10] = 10
 s[13] = 13
 s[12] = 12
 
+print(s.head)
+print(s.length)
+
 for i in s:
     print(i)
+print(s.head)
+print(s.length)
+'''

@@ -1,3 +1,6 @@
+from src.maps.Base_map import BaseMap
+
+
 class Node:
     """ linked list node class """
     def __init__(self, value=None, next=None, key=None):
@@ -41,18 +44,19 @@ class LinkedList:
         if self.a is None:
             raise StopIteration
         else:
-            elem = self.a.value
+            elem = self.a
             self.a = self.a.next
             return elem
 
 
-class HashMap:
+class HashMap(BaseMap):
     """ HashMap class """
     def __init__(self, _size=10):
         self._size = _size
         self._count = 0
-        self._inner_list = [LinkedList() for i in range(self._size)]
+        self._inner_list = [LinkedList() for numbers in range(self._size)]
 
+    """ getting an element by its key """
     def __getitem__(self, key):
         list_elem = self._inner_list[hash(key) % self._size].first
         while list_elem:
@@ -61,6 +65,7 @@ class HashMap:
             list_elem = list_elem.next
         raise KeyError
 
+    """ adding the value of an element by its key """
     def __setitem__(self, key, var):
         list_elem = self._inner_list[hash(key) % self._size].first
         flag = False
@@ -83,6 +88,7 @@ class HashMap:
                     j = j.next
             self._inner_list = list_elem
 
+    """ deleting an element by its key """
     def __delitem__(self, key):
         elem = self._inner_list[hash(key) % self._size].first
         prev_elem = None
@@ -126,10 +132,15 @@ class HashMap:
         else:
             return self._inner_list[self.counter]
 
+    def __len__(self):
+        return self._count
 
+
+'''
 s = HashMap(6)
 s[1] = 4
 s[3] = 5
 s[5] = 0
 for i in s:
     print(i)
+'''

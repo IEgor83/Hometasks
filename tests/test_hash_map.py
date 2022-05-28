@@ -2,7 +2,7 @@ import unittest
 
 from random import randint
 
-import src.hash_map as hm
+import src.maps.hash_map as hm
 
 
 class TestHashMap(unittest.TestCase):

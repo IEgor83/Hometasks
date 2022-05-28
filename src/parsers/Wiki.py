@@ -1,18 +1,32 @@
 """parsing using bs4"""
+
+import os
+import uuid
+import re
 import requests
 from bs4 import BeautifulSoup as BS
-from src.hash_map import HashMap
+from src.maps.hash_map import HashMap
+
+
+"""parsing wiki"""
+
+
+def write_map_in_file(url: str):
+    """write map in file"""
+    hash_map = HashMap()
+    req = requests.get(url)
+    soup = BS(req.content, 'html.parser')
+    with open('urls.txt', 'a', encoding="utf-8") as file:
+        file.write(req.url + '\n')
+    words = list(map(lambda s: s.lower().strip(), filter(lambda s: s.isalpha(), soup.text.split())))
+    for element in words:
+        try:
+            hash_map[element] += 1
+        except KeyError:
+            hash_map[element] = 1
+    wiki_title = soup.find(id="firstHeading").string.replace(' ', '') + '.txt'
+    hash_map.write(wiki_title)
+
 
 WIKI_RANDOM = "https://ru.wikipedia.org/wiki/Special:Random"
-r = requests.get(WIKI_RANDOM)
-soup = BS(r.content, 'html.parser')
-hash_map = HashMap(50)
-all_a = soup.find_all('a')
-for element in all_a:
-    element_text = element.text
-    if 'https://ru.wikipedia.org/w/index.php?title=' not in element_text:
-        print(element_text)
-        if hash_map[element_text] is None:
-            hash_map[element_text] = 0
-        hash_map[element_text] += 1
-print(hash_map)
+write_map_in_file(WIKI_RANDOM)
