@@ -87,7 +87,7 @@ class HashTree(BaseMap):
 
     def __iter__(self):
         def iteration(root):
-            temp.append((root.key, root.value))
+            temp.append(root.key)
             if root.left:
                 iteration(root.left)
             if root.right:
@@ -98,6 +98,17 @@ class HashTree(BaseMap):
 
     def __len__(self):
         return self.length
+
+    def items(self):
+        def iteration(root):
+            temp.append((root. key, root.value))
+            if root.left:
+                iteration(root.left)
+            if root.right:
+                iteration(root.right)
+        temp = []
+        iteration(self.head)
+        return temp
 
 
 if __name__ == '__main__':
@@ -117,3 +128,4 @@ if __name__ == '__main__':
         print(i)
     print(s.head)
     print(s.length)
+    print(s.items())

@@ -134,11 +134,18 @@ class HashMap(BaseMap):
         temp = []
         for i in self._inner_list:
             for j in i:
-                temp.append(j.value)
+                temp.append(j.key)
         return temp.__iter__()
 
     def __len__(self):
         return self._count
+
+    def items(self):
+        temp = []
+        for i in self._inner_list:
+            for j in i:
+                temp.append((j.key, j.value))
+        return temp
 
 
 if __name__ == '__main__':
@@ -148,3 +155,6 @@ if __name__ == '__main__':
     s[5] = 0
     for i in s:
         print(i)
+    print(s.items())
+    print(s.values())
+    print(s.keys())

@@ -22,17 +22,17 @@ class BaseMap(ABC):
   def __iter__(self) -> Iterable[Tuple[str, int]]:
     ...
 
-  def __contains__(self, key: str) -> bool:
-    for keys, elems in self:
-      if key == keys:
-        return True
-    return False
+  def __contains__(self, key) -> bool:
+    try:
+      return bool(' '.join(str(self[key])))
+    except KeyError:
+      return False
 
   def __eq__(self, other: 'BaseMap') -> bool:
     if len(self) != len(other):
       return False
     for i in self:
-      if not i[0] in other:
+      if i == other:
         return False
       if other[i[0]] != i[1]:
         return False
@@ -47,14 +47,15 @@ class BaseMap(ABC):
   def __len__(self):
     ...
 
+  @abstractmethod
   def items(self) -> Iterable[Tuple[str, int]]:
-    yield from self
+    ...
 
   def values(self) -> Iterable[int]:
-    return (item[1] for item in self)
+    return tuple(item[1] for item in self.items())
 
   def keys(self) -> Iterable[str]:
-    return (item[1] for item in self)
+    return tuple(item for item in self)
 
   @classmethod
   def fromkeys(cls, iterable, value=None) -> 'BaseMap':
@@ -89,7 +90,7 @@ class BaseMap(ABC):
       raise KeyError
     for elem in self:
       last_elem = elem
-    del self[last_elem[0]]
+    del self[last_elem]
     return last_elem
 
   def setdefault(self, key, default=None):
