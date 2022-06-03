@@ -1,4 +1,4 @@
-from src.maps.Base_map import BaseMap
+from src.maps.base_map import BaseMap
 
 
 class Node:
@@ -108,6 +108,15 @@ class HashMap(BaseMap):
                         self._inner_list[hash(key) % self._size].last = None
                 self._inner_list[hash(key) % self._size].length -= 1
                 self._count -= 1
+                if self._count <= 0.2 * self._size:
+                    self._size = self._size // 2
+                    list_elem = [LinkedList() for i in range(self._size)]
+                    for i in self._inner_list:
+                        j = i.first
+                        while j:
+                            list_elem[hash(j.key) % self._size].add(j.value, j.key)
+                            j = j.next
+                    self._inner_list = list_elem
                 break
             prev_elem = elem
             elem = elem.next
@@ -118,29 +127,24 @@ class HashMap(BaseMap):
     def __str__(self):
         out = ''
         for i in self._inner_list:
-            out = out + str(i) + '\n'
+            out = "".join([out, str(i), '\n'])
         return out
 
     def __iter__(self):
-        self.counter = -1
-        return self
-
-    def __next__(self):
-        self.counter += 1
-        if self.counter == len(self._inner_list):
-            raise StopIteration
-        else:
-            return self._inner_list[self.counter]
+        temp = []
+        for i in self._inner_list:
+            for j in i:
+                temp.append(j.value)
+        return temp.__iter__()
 
     def __len__(self):
         return self._count
 
 
-'''
-s = HashMap(6)
-s[1] = 4
-s[3] = 5
-s[5] = 0
-for i in s:
-    print(i)
-'''
+if __name__ == '__main__':
+    s = HashMap(6)
+    s[1] = 4
+    s[3] = 5
+    s[5] = 0
+    for i in s:
+        print(i)

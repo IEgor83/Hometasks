@@ -2,7 +2,7 @@ import unittest
 
 from random import shuffle
 
-import src.maps.hash_tree as ht
+import src.maps.tree_map as ht
 
 
 class TestHashMap(unittest.TestCase):

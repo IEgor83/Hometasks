@@ -1,5 +1,4 @@
-from src.maps.Base_map import BaseMap
-from copy import deepcopy
+from src.maps.base_map import BaseMap
 
 
 class NodeTree:
@@ -15,33 +14,27 @@ class HashTree(BaseMap):
         self.head = None
         self.length = 0
 
-    @classmethod
-    def add(cls, a, key, value):
-        if key > a.key:
-            if a.right is None:
-                a.right = NodeTree(key, value)
-            else:
-                cls.add(a.right, key, value)
-        elif key < a.key:
-            if a.left is None:
-                a.left = NodeTree(key, value)
-            else:
-                cls.add(a.left, key, value)
-        else:
-            a.value = value
-            raise KeyError
-
     def __setitem__(self, key, value):
         if self.head is None:
             self.head = NodeTree(key, value)
             self.length += 1
         else:
-            a = self.head
-            try:
-                self.add(a, key, value)
-                self.length += 1
-            except KeyError:
-                pass
+            def add(a, k, val):
+                if k > a.key:
+                    if a.right is None:
+                        a.right = NodeTree(k, val)
+                    else:
+                        add(a.right, k, val)
+                elif k < a.key:
+                    if a.left is None:
+                        a.left = NodeTree(k, val)
+                    else:
+                        add(a.left, k, val)
+                else:
+                    a.value = val
+                    self.length -= 1
+            add(self.head, key, value)
+            self.length += 1
 
     def __getitem__(self, key):
         a = self.head
@@ -56,14 +49,14 @@ class HashTree(BaseMap):
         raise KeyError
 
     def __delitem__(self, key):
-        def del_elem(elem, key):
+        def del_elem(elem, k):
             if not elem:
                 raise KeyError
-            if elem.key > key:
-                elem.left = del_elem(elem.left, key)
+            if elem.key > k:
+                elem.left = del_elem(elem.left, k)
                 return elem
-            elif elem.key < key:
-                elem.right = del_elem(elem.right, key)
+            elif elem.key < k:
+                elem.right = del_elem(elem.right, k)
                 return elem
             else:
                 if elem.left and elem.right:
@@ -88,49 +81,39 @@ class HashTree(BaseMap):
         def return_all(node):
             if node is None:
                 return ''
-            return return_all(node.left) + return_key(node) + return_all(node.right)
+            return "".join([return_all(node.left), return_key(node), return_all(node.right)])
 
         return return_all(self.head)
 
     def __iter__(self):
-        self.a = deepcopy(self)
-        return self
-
-    def __next__(self):
-        try:
-            if self.length > 0:
-                b = self.a.head
-                while b.left:
-                    b = b.left
-                del self.a[b.key]
-                return b.key, b.value
-            print(self.a)
-        except AttributeError:
-            raise StopIteration
+        def iteration(root):
+            temp.append((root.key, root.value))
+            if root.left:
+                iteration(root.left)
+            if root.right:
+                iteration(root.right)
+        temp = []
+        iteration(self.head)
+        return temp.__iter__()
 
     def __len__(self):
         return self.length
 
 
-'''
-s = HashTree()
+if __name__ == '__main__':
+    s = HashTree()
+    s[8] = 8
+    s[5] = 5
+    s[7] = 7
+    s[8] = 6
+    s[4] = 4
+    s[11] = 11
+    s[9] = 9
+    s[10] = 10
+    s[13] = 13
+    s[12] = 12
 
-s[8] = 8
-s[5] = 5
-s[7] = 7
-s[8] = 6
-s[4] = 4
-s[11] = 11
-s[9] = 9
-s[10] = 10
-s[13] = 13
-s[12] = 12
-
-print(s.head)
-print(s.length)
-
-for i in s:
-    print(i)
-print(s.head)
-print(s.length)
-'''
+    for i in s:
+        print(i)
+    print(s.head)
+    print(s.length)
