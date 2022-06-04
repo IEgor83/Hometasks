@@ -150,11 +150,11 @@ class HashMap(BaseMap):
 
 if __name__ == '__main__':
     s = HashMap(6)
-    s[1] = 4
-    s[3] = 5
-    s[5] = 0
+    s['e343'] = 4
+    s['3'] = 5
+    s['5'] = 0
     for i in s:
         print(i)
     print(s.items())
     print(s.values())
-    print(s.keys())
+    print(sorted(s.items(), key=lambda x: x[0]))

@@ -51,6 +51,7 @@ def from_list_to_file(lis, path):
     """Записать в файл список кортежей (key, value)"""
     with open(path, "w", encoding="utf-8") as file:
         for i in lis:
+            print(i)
             file.write(f"{i[0]}\t{i[1]}\n")
 
 
@@ -102,7 +103,7 @@ def wiki_parser(url: str, base_path):
                     hash_map[word] += 1
                 except KeyError:
                     hash_map[word] = 1
-        from_list_to_file(sorted(hash_map, key=lambda x: x[0]), os.path.join(path, "words.txt"))
+        from_list_to_file(sorted(hash_map.items(), key=lambda x: x[0]), os.path.join(path, "words.txt"))
         # Вернуть список всех ссылок на вики.
         href_list = []
         for tag in soup.find_all(href=re.compile("^/wiki/")):
@@ -189,12 +190,12 @@ def multi(mode, url, base_path, max_workers=5, deep=3):
 
 
 #if __name__ == "__main__":
-    #multi(ThreadPoolExecutor, 'https://ru.wikipedia.org/wiki/Чёрмозский_завод',
+    #multi(ThreadPoolExecutor, 'https://ru.wikipedia.org/wiki/Бакаев,_Александр_Александрович',
           #r'C:\Users\Dell\PycharmProjects\Hometasks\src')
-    #multi(ProcessPoolExecutor, 'https://ru.wikipedia.org/wiki/Чёрмозский_завод',
+    #multi(ProcessPoolExecutor, 'https://ru.wikipedia.org/wiki/Бакаев,_Александр_Александрович',
           #r'C:\Users\Dell\PycharmProjects\Hometasks\src')
 
 
 if __name__ == "__main__":
-    wiki_parser('https://ru.wikipedia.org/wiki/Чёрмозский_завод',
+    wiki_parser('https://ru.wikipedia.org/wiki/Бакаев,_Александр_Александрович',
                 r'C:\Users\Dell\PycharmProjects\Hometasks\src')
